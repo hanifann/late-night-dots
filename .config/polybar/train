@@ -1,0 +1,463 @@
+ 
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+[colors]
+background = ${xrdb:color0:#222}
+;background = #22262a
+background-alt = #22262a
+foreground = ${xrdb:color7:#222}
+;foreground = #ffffff
+foreground-alt = ${xrdb:color6:#222}
+;foreground-alt = #8e9aa4
+primary = ${xrdb:color1:#222}
+;primary = #ff0000
+secondary = ${xrdb:color2:#222}
+;secondary = #fcedc5
+alert = ${xrdb:color3:#222}
+;alert = #ff6666
+
+[bar/main]
+monitor = ${env:MONITOR:eDP1}
+width = 920
+height = 50
+offset-x = 26%
+offset-y = 3%
+radius = 0
+fixed-center = true
+bottom = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 0
+line-color = #f00
+
+border-size = 0
+border-color = ${xrdb:color2:#222}
+;border-color = #d9d9d9
+
+padding-left = 3
+padding-right = 3
+padding-bottom = 5
+
+module-margin-left = 1
+module-margin-right = 1
+
+font-0 = Cozette:style=Bold:size=10:antialias=false;2
+font-1 = FontAwesome 6 Free:size=10:style=Solid;2
+font-2 = Font Awesome 6 Brands:pixelsize=10;2
+font-3 = Font Awesome 6 Free:pixelsize=10;2
+
+
+modules-left = mpd
+modules-center = xworkspaces
+modules-right = battery date
+
+tray-position = none
+tray-background = ${colors.background}
+tray-padding = 5
+tray-offset-x = 0
+tray-offset-y = 0
+tray-maxsize = 16
+tray-transparent = false
+
+wm-restack = bspwm
+;wm-restack = i3
+
+override-redirect = true
+
+;scroll-up = bspwm-desknext
+;scroll-down = bspwm-deskprev
+
+;scroll-up = i3wm-wsnext
+;scroll-down = i3wm-wsprev
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+
+; Active modules
+
+[module/bspwm]
+type = internal/bspwm
+
+ws-icon-0 = web;
+ws-icon-1 = code;
+ws-icon-2 = media;
+ws-icon-3 = edit;
+ws-icon-4 = graphics;
+ws-icon-5 = other;
+ws-icon-default = 
+
+label-focused = %icon%
+label-focused-foreground = ${xrdb:color1:#222}
+label-focused-background = ${colors.background}
+label-focused-underline= ${colors.primary}
+label-focused-padding = 2
+
+label-occupied = %icon%
+label-occupied-foreground = ${xrdb:color7:#222}
+label-occupied-padding = 2
+
+label-urgent = %icon%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 2
+
+label-empty = %icon%
+label-empty-foreground = #4a4a4a
+label-empty-padding = 2
+
+; Separator in between workspaces
+;label-separator = |
+;label-separator-padding = 2
+;label-separator-foreground = #ffb52a
+
+[module/xworkspaces]
+type			= internal/xworkspaces
+pin-workspaces	= true
+enable-click	= true
+enable-scroll	= false
+
+format			= <label-state>
+format-background	= ${colors.background}
+
+label-active			= %icon%
+label-active-foreground		= ${colors.foreground-alt}
+label-active-padding		= 2
+;label-active-underline		
+
+label-occupied			= %icon%
+label-occupied-foreground	= ${colors.foreground}
+label-occupied-padding		= 2
+;label-occupied-underline	=
+
+label-urgent			= %icon%
+label-urgent-foreground		= ${colors.foreground}
+label-urgent-padding			= 2
+;label-urgent-padding			=
+
+label-empty			= ·
+label-empty-foreground		= ${colors.foreground}
+label-empty-padding		= 2
+
+icon-0 = 1;
+icon-1 = 2;
+icon-2 = 3;
+icon-3 = 4;
+icon-4 = 5;
+icon-5 = 6;
+icon-default =  
+
+[module/battery]
+type = internal/battery
+
+; This is useful in case the battery never reports 100% charge
+full-at = 99
+
+; Use the following command to list batteries and adapters:
+; $ ls -1 /sys/class/power_supply/
+battery = BAT1
+adapter = ADP1
+
+; If an inotify event haven't been reported in this many
+; seconds, manually poll for new values.
+;
+; Needed as a fallback for systems that don't report events
+; on sysfs/procfs.
+;
+; Disable polling by setting the interval to 0.
+;
+; Default: 5
+poll-interval = 2
+
+; see "man date" for details on how to format the time string
+; NOTE: if you want to use syntax tags here you need to use %%{...}
+; Default: %H:%M:%S
+time-format = %H:%M
+
+; Available tags:
+;   <label-charging> (default)
+;   <bar-capacity>
+;   <ramp-capacity>
+;   <animation-charging>
+format-charging = <animation-charging> <label-charging>
+;;format-charging-prefix = 
+; Available tags:
+;   <label-discharging> (default)
+;   <bar-capacity>
+;   <ramp-capacity>
+;   <animation-discharging>
+format-discharging = <ramp-capacity> <label-discharging>
+
+; Available tags:
+;   <label-full> (default)
+;   <bar-capacity>
+;   <ramp-capacity>
+;format-full = <ramp-capacity> <label-full>
+
+; Available tokens:
+;   %percentage% (default)
+;   %time%
+;   %consumption% (shows current charge rate in watts)
+
+label-charging = %percentage%%
+
+; Available tokens:
+;   %percentage% (default)
+;   %time%
+;   %consumption% (shows current discharge rate in watts)
+label-discharging = %percentage%%
+
+; Available tokens:
+;   %percentage% (default)
+label-full = Fully Charged
+
+; Only applies if <ramp-capacity> is used
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+ramp-capacity-foreground = ${colors.foreground}
+
+; Only applies if <bar-capacity> is used
+;bar-capacity-width = 10
+
+; Only applies if <animation-charging> is used
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+
+; Framerate in milliseconds
+animation-charging-framerate = 750
+
+; Only applies if <animation-discharging> is used
+;;animation-discharging-0 = 
+;;animation-discharging-1 = 
+;;animation-discharging-2 = 
+;;animation-discharging-3 = 
+;;animation-discharging-4 = 
+;;animation-discharging-5 = 
+;;animation-discharging-6 = 
+;;animation-discharging-7 = 
+;;animation-discharging-8 = 
+
+; Framerate in milliseconds
+;animation-discharging-framerate = 500
+
+;; _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+[module/menu]
+type = custom/menu
+expand-right = true
+format-spacing = 1
+label-separator = "  "
+format = <label-toggle><menu>
+label-open = ""
+label-close = ""
+label-open-foreground = ${xrdb:color2:#222}
+label-close-foreground = ${xrdb:color2:#222}
+menu-0-0 = "App Menu"
+menu-0-0-exec = rofi -show drun -width 30 -lines 20 -location 1 -xoffset 25 -yoffset 60 -columns 2 
+menu-0-1 = "Browsers"
+menu-0-1-exec = menu-open-1
+menu-0-2 = "Chats"
+menu-0-2-exec = menu-open-2
+menu-0-3 = "Edit"
+menu-0-3-exec = menu-open-3
+menu-0-4 = "Graphics"
+menu-0-4-exec = menu-open-4
+
+menu-1-0 = "Brave"
+menu-1-0-exec = brave &
+
+menu-2-0 = "Telegram"
+menu-2-0-exec = telegram-desktop &
+menu-2-1 = "Discord"
+menu-2-1-exec = discord &
+
+menu-3-0 = "VIM"
+menu-3-0-exec = urxvt -e vim &
+menu-3-1 = "Sublime Text"
+menu-3-1-exec = subl3 &
+
+menu-4-0 = "GIMP"
+menu-4-0-exec = gimp &
+menu-4-1 = "Inkscape"
+menu-4-1-exec = Inkscape &
+
+[module/spotify_status]
+type = custom/script
+format-prefix = " "
+format-prefix-foreground = ${xrdb:color3:#222}
+interval = 1
+format = <label>
+exec = python2 ~/.config/polybar/scripts/spotify.py -f '{artist} - {song}'
+
+[module/mpd]
+type = internal/mpd
+format-online =  <label-song>
+format-offline =  <label-offline>
+label-offline = mpd is offline
+
+interval = 1
+
+label-song =    %artist% - %title%
+label-song-maxlen = 35
+label-song-ellipsis = true
+
+icon-prev = 
+icon-stop = 
+icon-play = 
+icon-pause = 
+icon-next = 
+
+[module/openweathermap]
+type = custom/script
+exec = /home/ma/scripts/polybar/openweathermap-simple.sh
+interval = 600
+label-font = 6
+
+[module/skb]
+type = custom/script
+exec = skb
+tail = true
+interval = 0.5
+format-prefix = "  "
+format-prefix-foreground = ${xrdb:color5:#222}
+
+[module/date]
+type = internal/date
+interval = 5
+label = %time%
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground}
+
+;date = %d/%m
+date-alt = %A, %d/%m/%Y
+
+time = %H:%M
+time-alt = %A, %d/%m/%Y
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+;format-volume = <label-volume> <bar-volume>
+format-volume = <ramp-volume> <label-volume>
+;label-volume = %percentage%%
+label-volume-foreground = ${root.foreground}
+
+; Only applies if <ramp-volume> is used
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+ramp-volume-foreground = ${xrdb:color4:#222}
+
+label-muted = muted
+label-muted-foreground = #666
+
+[module/volume]
+type = internal/alsa
+
+format-volume = <label-volume> <bar-volume>
+label-volume = " "
+label-volume-foreground = ${xrdb:color2:#00ff00}
+
+format-muted-prefix = " "
+format-muted-foreground = ${colors.foreground-alt}
+label-muted = sound muted
+
+bar-volume-width = 10
+bar-volume-foreground-0 = ${xrdb:color2}
+bar-volume-foreground-1 = ${xrdb:color2}
+bar-volume-foreground-2 = ${xrdb:color2}
+bar-volume-foreground-3 = ${xrdb:color2}
+bar-volume-foreground-4 = ${xrdb:color2}
+bar-volume-foreground-5 = ${xrdb:color3}
+bar-volume-foreground-6 = ${xrdb:color1}
+bar-volume-gradient = false
+bar-volume-indicator = ━
+bar-volume-indicator-font = 1
+bar-volume-fill = ━
+bar-volume-fill-font = 1
+bar-volume-empty = ━
+bar-volume-empty-font = 1
+bar-volume-empty-foreground = ${xrdb:color0}
+
+
+[module/poweroff]
+type = custom/script
+exec = echo " "
+click-left = "~/.config/polybar/scripts/power.sh"
+format-prefix = ""
+format-prefix-foreground = ${xrdb:color1:#222}
+
+; Inactive modules
+
+[module/clipboard]
+type = custom/script
+exec = echo ""
+click-left = "~/scripts/clipboard.sh"
+
+[module/xwindow]
+format = <label>
+type = internal/xwindow
+label = %title:0:45:...%
+format-foreground = #b8bfc6
+
+[module/xkeyboard]
+label-layout = %layout%
+type = internal/xkeyboard
+blacklist-0 = num lock
+
+format-prefix-foreground = ${colors.foreground-alt}
+
+label-indicator-padding = 0
+label-indicator-margin = 0
+label-indicator-background = ${colors.secondary}
+
+[module/right-corner]
+type = custom/text
+content = " "
+content-background = ${colors.background}
+content-padding = 0
+
+[module/left-corner]
+type = custom/text
+content = " "
+content-background = ${colors.background}
+content-padding = 0
+
+; Other
+
+[settings]
+screenchange-reload = true
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+;pseudo-transparency = false
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+
+; vim:ft=dosini

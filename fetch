@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# fetch - rsfetch wrapper
+# (c) Kiëd Llaentenn
+
+# color escapes
+BLK="$(printf "\033[30m")"
+RED="$(printf "\033[31m")"
+GRN="$(printf "\033[32m")"
+YLW="$(printf "\033[33m")"
+BLU="$(printf "\033[34m")"
+PUR="$(printf "\033[35m")"
+CYN="$(printf "\033[36m")"
+WHT="$(printf "\033[37m")"
+RST="$(printf "\033[0m")"
+
+# build the color bars
+BAR="━━━━"
+LEN=6
+OUTT="$RED$BAR$GRN$BAR$YLW$BAR$BLU$BAR$PUR$BAR$CYN$BAR$RST"
+
+data=
+
+while IFS="\n" read -r info; do
+	data="${data} $info"
+done <<EOF
+EOF
+
+if command -v kiss >/dev/null 2>&1 ; then
+    pkgs=$(kiss l | wc -l)
+fi
+
+set -- ${data}
+
+echo "
+${OUTT}
+${BLU}os               ${RST}void
+${BLU}wm		 ${RST}2bwm
+${BLU}editor           ${RST}vim
+${BLU}shell            ${RST}zsh
+${OUTT}
+"
